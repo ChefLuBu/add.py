@@ -1,22 +1,39 @@
-Created new python venvs, using "py -m venv" command
-Current install:
-    distlib==0.3.6
-    filelock==3.9.0
-    platformdirs==3.0.0
-    virtualenv==20.19.0
-    virtualenvwrapper-win==1.2.7
-
-What was your motivation?
-Why did you build this project?
-What problem does it solve?
-What did you learn?
-What makes your project stand out?
-If your project has a lot of features, consider adding a "Features" section and listing them here.
 
 1. Project's Title
-2. Project Description
+    pythonWebCF
+
+2. Project Description 
+    -This will eventually be a recipe app that allows the user to browse through a selection of recipes and find one to their liking, including measurements, ingredients and descriptions of each dish
+
 3. Table of Contents (Optional)
+    -TBD
+
 4. How to Install and Run the Project
+    Creat a new python venv, using "py -m venv" command
+    Right-click on add.py and select "run python file in Terminal"
+    File is now running
+
 5. How to Use the Project
-6. Include Credits
-7. Add a License
+    -TBD
+
+6. Features
+    -TBD
+
+7. Include Credits
+    -TBD
+
+8. Add a License
+    -TBD
+
+
+
+What was your motivation?
+    My motivation for learning Python is to better myself as a developer and learn one of the most-commonly used and efficient languages in modern coding
+Why did you build this project?
+    I am building this project in conjunction with Career Foundry's python specialization course.
+What problem does it solve?
+    This project will make finding a recipe for dinner easy and fun
+What did you learn?
+    So far I've learned how to set up the Python environment and input basic mathematical variables
+What makes your project stand out?
+    My project will stand out because of my love for and history with the culinary industry, as well as my desirne to always deliver a great product
