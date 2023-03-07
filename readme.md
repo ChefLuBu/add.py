@@ -39,4 +39,4 @@
         My project will stand out because of my love for and history with the culinary industry, as well as my desirne to always deliver a great product
 
 ## Exercise 1.2
-    I chose to use a dictionary for this exercise as it gave me the greatest flexability in creating a recipe object. By using a dictionary, I can create sublists in the form of tuples for things such as ingredients, which makes them easier to move around if necessary, add items to, remove, or replace altogether. 
+    I chose to use a dictionary for this exercise as it gave me the greatest flexability in creating a recipe object. By using a dictionary, I can create sublists in the form of tuples for things such as ingredients, which makes them easier to move around if necessary, add items to, remove, or replace altogether. For the over-arching category of "all_recipes", I chose to use a simple list at this time. Since the recipes can just be held as objects within the list, all_recipes doesn't need to be nearly as complex, so a list is ideal.
