@@ -7,9 +7,9 @@ def display_recipe(recipe):
     with open('recipe_binary.bin', 'rb') as my_file:
         recipe = pickle.load(my_file)
     print("Recipe details - ")
-    print('Ingredient Name: ', recipe['ingredients'])
+    print('Ingredient Name: ',','.join(recipe['ingredients']))
     # print("Ingredient Name:  " + recipe['ingredients']) 
-    print(recipe['ingredients']) 
+    # print(recipe['ingredients']) 
     print("Cooking time: " + recipe['Cooking Time'])
     print("Difficulty:  " + recipe['Difficulty'])
 
