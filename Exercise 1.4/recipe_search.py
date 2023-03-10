@@ -41,7 +41,7 @@ def search_ingredient(data):
         for recipe in data['recipes_list']:
             for recipe_ing in recipe['ingredients']:
                 if (recipe_ing == ingredient_searched):
-                    print('Recipe Name: ', recipe['name'])
+                    print('\nThe following recipes contain the ingredient you searched for: ')
                     display_recipe(recipe)
 
 
