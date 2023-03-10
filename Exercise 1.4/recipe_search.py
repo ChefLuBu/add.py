@@ -4,18 +4,16 @@
 import pickle 
 
 def display_recipe(recipe):
-    with open('recipe_binary.bin', 'rb') as my_file:
-        recipe = pickle.load(my_file)
+    print('Name: ', recipe['name'])
     print("Recipe details - ")
-    print('Ingredient Name: ',','.join(recipe['ingredients']))
-    # print("Ingredient Name:  " + recipe['ingredients']) 
-    # print(recipe['ingredients']) 
-    print("Cooking time: " + recipe['Cooking Time'])
-    print("Difficulty:  " + recipe['Difficulty'])
+    print('Ingredient Name: ',','.join(recipe['ingredients_list']))
+    print('Cooking Time in minutes:  ', recipe['cooking_time'])
+    print("Difficulty:  ", recipe['Difficulty'])
 
 def search_ingredient(data):
     ingredients_list = data['ingredients_list']
     indexed_ingredients_list = list(enumerate(ingredients_list, 1))
+    
     for ingredient in indexed_ingredients_list:
         print('No.', ingredient[0], ' - ', ingredient[1])
 
@@ -26,20 +24,15 @@ def search_ingredient(data):
 # The user enters the number of the ingredient he wants to search for.
 
  
-
+# The Try block asks the user to enter the number of the ingredient
+# The number is stored in the variable chosen_num.
+# It then retrieves the ingredient from the list of ingredients
+# using the index variable. The ingredient is stored in the variable  
     try:
         chosen_num = int(input("Enter the number of the ingredient you want to search for: "))
         index = chosen_num - 1
         ingredient_searched = ingredients_list[index]
         ingredient_searched = ingredient_searched.lower()
-
-# The Try block asks the user to enter the number of the ingredient
-# The number is stored in the variable chosen_num.
-# It then retrieves the ingredient from the list of ingredients
-# using the index variable. The ingredient is stored in the variable  
-
-
-
     except IndexError:
         print("The number you entered is not in the list.")
     except:
