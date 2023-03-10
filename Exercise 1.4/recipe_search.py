@@ -6,7 +6,7 @@ import pickle
 def display_recipe(recipe):
     print('Name: ', recipe['name'])
     print("Recipe details - ")
-    print('Ingredient Name: ',','.join(recipe['ingredients_list']))
+    print('Ingredient Name: ',','.join(recipe['ingredients']))
     print('Cooking Time in minutes:  ', recipe['cooking_time'])
     print("Difficulty:  ", recipe['Difficulty'])
 
@@ -16,14 +16,13 @@ def search_ingredient(data):
     
     for ingredient in indexed_ingredients_list:
         print('No.', ingredient[0], ' - ', ingredient[1])
-
 # First, it shows the user all the available ingredients 
 # contained in data, under the key all_ingredients.
 # Each ingredient is displayed with a number (take the index
 # of each ingredient for this purpose using the enumerate() function).
-# The user enters the number of the ingredient he wants to search for.
 
- 
+
+# The user enters the number of the ingredient he wants to search for.
 # The Try block asks the user to enter the number of the ingredient
 # The number is stored in the variable chosen_num.
 # It then retrieves the ingredient from the list of ingredients
@@ -52,10 +51,10 @@ try:
 
 except FileNotFoundError:
     print("The file you entered does not exist.")   
-    data = {'recipes_list': [], 'all_ingredients': []}
+    data = {'recipes_list': [], 'ingredients_list': []}
 except:
     print('An error occurred. Please try again.')
-    data = {'recipes_list': [], 'all_ingredients': []}
+    data = {'recipes_list': [], 'ingredients_list': []}
 else:
     print("The following ingredients are available: ")
     search_ingredient(data)
