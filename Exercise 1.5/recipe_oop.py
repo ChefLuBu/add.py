@@ -4,15 +4,15 @@ class Recipe(object):
     def __init__(self, name):
         self.name = name
         self.ingredients = []
-        self.cooking_time = int()
+        self.cooking_time = int(0)
         self.difficulty = ""
 
     def get_name(self):
-        output = "Recipe: " + self.name 
+        output = "Recipe: " + str(self.name) 
         return output
     
     def set_name(self, name):
-        self.name = name
+        self.name = str(name)
         
     def get_cooking_time(self):
         output = "Cooking time: " + str(self.cooking_time) + " minutes"
@@ -29,8 +29,7 @@ class Recipe(object):
         print('\nIngredients:')
         for ingredient in self.ingredients:
             print(' - ' + ingredient)
-        # for ingredient in self.ingredients:
-        #     print(' - ' + str(self.ingredient))
+     
 
     def search_ingredient(self, ingredient, ingredients):
         if(ingredient in ingredients):
@@ -48,9 +47,8 @@ class Recipe(object):
         search_term = ingredient
         for recipe in data:
             if search_term in recipe.ingredients:
-                print(recipe.name)
-            # if self.search_ingredient(search_term, recipe.ingredients):
-            #     print(recipe.name)
+                print(recipe)
+            
      
     def get_difficulty(self):
         difficulty = self.calc_difficulty(self.cooking_time, self.ingredients)
