@@ -21,8 +21,8 @@ class Recipe(object):
     def set_cooking_time(self, cooking_time):
         self.cooking_time = int(cooking_time)
    
-    def add_ingredients(self, ingredient):
-        self.ingredients.append(ingredient)
+    def add_ingredients(self, *args):
+        self.ingredients = args
         self.update_all_ingredients()
 
     def get_ingredients(self):
@@ -51,33 +51,32 @@ class Recipe(object):
                 print(recipe.name)
             # if self.search_ingredient(search_term, recipe.ingredients):
             #     print(recipe.name)
-    
-    def calc_difficulty(self, cooking_time, ingredients):
-            if (cooking_time) < 10 and len(ingredients) < 4:
-                difficulty = "easy"
-            elif (cooking_time) < 10 and len(ingredients) <= 4:
-                difficulty = "medium"
-            elif (cooking_time) >= 10 and len(ingredients) < 4:
-                difficulty = "intermediate"
-            elif (cooking_time) >= 10 and len(ingredients) >= 4:
-                difficulty = "hard"
-                return difficulty
-            else:
-                print("No difficulty found")
-            return difficulty
-    
-    
+     
     def get_difficulty(self):
         difficulty = self.calc_difficulty(self.cooking_time, self.ingredients)
-        output = "Difficulty: " + str(self.cooking_time) + " minutes"
-        self.difficulty= difficulty
+        output = "Difficulty: " + str(self.cooking_time)
+        self.difficulty = difficulty
         return output
+
+    def calc_difficulty(self, cooking_time, ingredients):
+            if (cooking_time < 10) and (len(ingredients) < 4):
+                difficulty = "easy"
+            elif (cooking_time < 10) and (len(ingredients) <= 4):
+                difficulty = "medium"
+            elif (cooking_time >= 10) and (len(ingredients) < 4):
+                difficulty = "intermediate"
+            elif (cooking_time >= 10) and (len(ingredients) >= 4):
+                difficulty = "hard"
+            else:
+                print("No difficulty found")
+
+            return difficulty
 
     def __str__(self):
         output = '\nRecipe: ' + self.name + '\n'
-        'Cooking time: ' + str(self.cooking_time) + ' minutes' + '\n'
-        'Difficulty: ' + self.difficulty + '\n'
-        '\nIngredients:\n'
+        'Cooking time: ' + str(self.cooking_time) + ' minutes' + \
+        '\nDifficulty: ' + str(self.difficulty) + \
+        '\nIngredients:\n' 
         for ingredient in self.ingredients:
             output += ingredient + '\n'
         return output
