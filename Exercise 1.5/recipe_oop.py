@@ -1,11 +1,14 @@
 class Recipe(object):
     all_ingredients = []
+#set all ingredients to an empty list
 
     def __init__(self, name):
         self.name = name
         self.ingredients = []
         self.cooking_time = int(0)
         self.difficulty = ""
+# init method is called when the class is instantiated
+# self is the instance of the class
 
     def get_name(self):
         output = "Recipe: " + str(self.name) 
@@ -24,6 +27,8 @@ class Recipe(object):
     def add_ingredients(self, *args):
         self.ingredients = args
         self.update_all_ingredients()
+#args is a tuple of arguments
+#since all ingredients are stored in a list, we need to convert the tuple to a list
 
     def get_ingredients(self):
         print('\nIngredients:')
@@ -36,11 +41,13 @@ class Recipe(object):
             return True
         else:
             return False
+#boolean function to check if an ingredient is in the list of ingredients
 
     def update_all_ingredients(self):
         for ingredient in self.ingredients:
             if ingredient not in self.all_ingredients:
                 self.all_ingredients.append(ingredient)
+
 
     def recipe_search(self, recipes_list, ingredient):
         data = recipes_list
@@ -56,12 +63,13 @@ class Recipe(object):
         self.difficulty = difficulty
         return output
 
+
     def calc_difficulty(self, cooking_time, ingredients):
             if (cooking_time < 10) and (len(ingredients) < 4):
                 difficulty = "easy"
-            elif (cooking_time < 10) and (len(ingredients) <= 4):
+            elif (cooking_time < 10) and (len(ingredients) > 4):
                 difficulty = "medium"
-            elif (cooking_time >= 10) and (len(ingredients) < 4):
+            elif (cooking_time >= 10) and (len(ingredients) > 4):
                 difficulty = "intermediate"
             elif (cooking_time >= 10) and (len(ingredients) >= 4):
                 difficulty = "hard"
@@ -78,7 +86,8 @@ class Recipe(object):
         for ingredient in self.ingredients:
             output += ingredient + '\n'
         return output
-    
+ #output += is the same as output = output +
+
     def view_recipe(self):
         print('\nRecipe: ' + self.name + '\n')
         print('Cooking time: ' + str(self.cooking_time) + ' minutes')
@@ -126,5 +135,5 @@ tea.recipe_search(recipes_list, "Sugar")
 print('Recipes with Water:    ')
 tea.recipe_search(recipes_list, "Water")
 
-print('Recipes with Bananas:    ')
-tea.recipe_search(recipes_list, "Bananas")
+print('Recipes with Banana:    ')
+tea.recipe_search(recipes_list, "Banana")
