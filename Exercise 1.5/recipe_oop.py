@@ -69,7 +69,7 @@ class Recipe(object):
                 difficulty = "easy"
             elif (cooking_time < 10) and (len(ingredients) > 4):
                 difficulty = "medium"
-            elif (cooking_time >= 10) and (len(ingredients) > 4):
+            elif (cooking_time >= 10) and (len(ingredients) < 4):
                 difficulty = "intermediate"
             elif (cooking_time >= 10) and (len(ingredients) >= 4):
                 difficulty = "hard"

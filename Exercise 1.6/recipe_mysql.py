@@ -1,4 +1,4 @@
-import mysql.connector
+import mysql.connector 
 
 conn = mysql.connector.connect(
     host="localhost",user ='cf-python', passwd='password')
@@ -47,11 +47,11 @@ def main_menu(conn, cursor):
 def create_recipe(conn, cursor):
     recipe_ingredients = []
     name = input('Enter recipe name: ')
-    cooking_time = input('Enter cooking time: ')
+    cooking_time = int(input('Enter cooking time: '))
     ingredients = input('Enter ingredients: ')
     recipe_ingredients.append(ingredients)
     recipe_ingredients_str = ', '.join(recipe_ingredients)
-    difficulty = calc_difficulty(cooking_time, ingredients)
+    difficulty = calc_difficulty(cooking_time, recipe_ingredients)
     sql = "INSERT INTO recipes (name, ingredients, cooking_time, difficulty) VALUES (%s, %s, %s, %s)"
     val = (name, recipe_ingredients_str, cooking_time, difficulty) 
     cursor.execute(sql, val)
@@ -59,17 +59,17 @@ def create_recipe(conn, cursor):
     print("Recipe added")
 
 
-def calc_difficulty(self, cooking_time, ingredients):
+def calc_difficulty(cooking_time, ingredients):
     if (cooking_time < 10) and (len(ingredients) < 4):
         difficulty = "easy"
     elif (cooking_time < 10) and (len(ingredients) > 4):
         difficulty = "medium"
-    elif (cooking_time >= 10) and (len(ingredients) > 4):
+    elif (cooking_time >= 10) and (len(ingredients) < 4):
         difficulty = "intermediate"
     elif (cooking_time >= 10) and (len(ingredients) >= 4):
         difficulty = "hard"
     else:
-        print("No difficulty found")
+        print("An error occured")
 
     
     print ("Difficulty: " + difficulty)
@@ -119,11 +119,11 @@ def search_recipe(conn, cursor):
 
 def modify_recipe(conn, cursor):
     recipe_id_for_update = int(input("Enter the id of the recipe you want to update: "))    
-    column_to_update = str(input("Select either Name, Ingredients, or Cooking Time to update: "))
+    column_to_update = str(input("Select either name, Ingredients, or Cooking Time to update: "))
     updated_value = (input("Enter the recipes new value: "))
     print ("You selected to update the " + column_to_update + " of recipe " + str(recipe_id_for_update) + " to " + updated_value)
 
-    if column_to_update == "Name":
+    if column_to_update == "name":
         cursor.execute("UPDATE recipes SET name = %s WHERE id = %s", (updated_value, recipe_id_for_update))
         print("Recipe updated")
 
