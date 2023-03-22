@@ -1,11 +1,15 @@
 import mysql.connector
+#requires install of mysql.connector via pip install mysql-connector-python
 
 conn = mysql.connector.connect(
     host="localhost", user='cf-python', passwd='password')
+#user and password are created in mysql workbench
 
 cursor = conn.cursor()
+#cursor is used to execute SQL queries
 
 cursor.execute("CREATE DATABASE IF NOT EXISTS task_database")
+#creates database if a database with the specified name does not exist
 
 cursor.execute("USE task_database")
 
@@ -16,7 +20,12 @@ ingredients VARCHAR(255),
 cooking_time INT,
 difficulty VARCHAR(20)
 )''')
-
+#creates table if a table with the specified name does not exist
+#id is the primary key and is auto incremented
+#name is a varchar with a max length of 50
+#ingredients is a varchar with a max length of 255
+#cooking_time is an integer
+#difficulty is a varchar with a max length of 20
 
 def main_menu(conn, cursor):
     choice = ''
@@ -39,7 +48,7 @@ def main_menu(conn, cursor):
             delete_recipe(conn, cursor)
         elif choice == '5':
             print('returning to main menu')
-
+#as long as the user does not enter quit, the program will continue to run
 
 def create_recipe(conn, cursor):
     recipe_ingredients = []
@@ -54,7 +63,12 @@ def create_recipe(conn, cursor):
     cursor.execute(sql, val)
     conn.commit()
     print("Recipe added")
-
+#creates a recipe and adds it to the database
+#the difficulty is calculated using the calc_difficulty function
+#the ingredients are added to a list and then converted to a string
+#the string is then added to the database
+#the database is then committed
+#the user is then notified that the recipe has been added
 
 def calc_difficulty(cooking_time, recipe_ingredients):
     if (cooking_time < 10) and (len(recipe_ingredients) < 4):
@@ -70,7 +84,7 @@ def calc_difficulty(cooking_time, recipe_ingredients):
 
     print("Difficulty: " + difficulty)
     return difficulty
-
+#calculates the difficulty of the recipe based on the cooking time and number of ingredients
 
 def search_recipe(conn, cursor):
     all_ingredients = []
@@ -82,11 +96,16 @@ def search_recipe(conn, cursor):
             all_ingredients.extend(recipe_ingredient_split)
     all_ingredients = list(dict.fromkeys(all_ingredients))
     all_ingredients_list = list(enumerate(all_ingredients))
-
+#searches the database for a specific ingredient
+#When the user enters an ingredient, the program searches the database for recipes that contain that ingredient
+#it then prints the recipes that contain that ingredient
+    
     print("Ingredients:")
 
     for index, tup in enumerate(all_ingredients_list):
         print(str(tup[0]+1) + "." + tup[1])
+#enumerates the ingredients and prints them to the screen
+#the user is then prompted to enter the number of the ingredient they want to search for
 
     try:
         ingredient_searched_nber = input(
@@ -94,15 +113,19 @@ def search_recipe(conn, cursor):
         ingredient_searched_index = int(ingredient_searched_nber) - 1
         ingredient_searched = all_ingredients_list[ingredient_searched_index][1]
         print("You searched for: " + ingredient_searched)
+#the user input is converted to an integer and then used to index the list of ingredients
+#the ingredient is then printed to the screen
 
     except:
         print("No ingredient found")
 
     else:
         print("Recipes with " + ingredient_searched + ":")
+#the program then searches the database for recipes that contain the ingredient
 
         cursor.execute("SELECT * FROM recipes WHERE ingredients LIKE %s",
                        ('%'+ingredient_searched+'%',))
+#the % is used to search for the ingredient anywhere in the string
 
         results_recipes_with_ingredient = cursor.fetchall()
         for row in results_recipes_with_ingredient:
@@ -111,6 +134,9 @@ def search_recipe(conn, cursor):
             print("ingredients: " + row[2])
             print("cooking_time: " + row[3])
             print("difficulty: " + row[4])
+#the results are then printed to the screen
+#containing the id, name, ingredients, cooking time, and difficulty
+#the row[0] is the id, row[1] is the name, etc.
 
 
 def modify_recipe(conn, cursor):
@@ -121,6 +147,12 @@ def modify_recipe(conn, cursor):
     updated_value = (input("Enter the recipes new value: "))
     print("You selected to update the " + column_to_update +
           " of recipe " + str(recipe_id_for_update) + " to " + updated_value)
+#the user is prompted to enter the id of the recipe they want to update
+#the user is then prompted to enter the column they want to update
+#either name, ingredients, or cooking time
+#the user is then prompted to enter the new value for the column
+#the user is then notified of the changes they are about to make
+#difficulty is not included because it is calculated based on the cooking time and ingredients
 
     if column_to_update == "name":
         cursor.execute("UPDATE recipes SET name = %s WHERE id = %s",
