@@ -29,7 +29,7 @@ difficulty VARCHAR(20)
 
 def main_menu(conn, cursor):
     choice = ''
-    while (choice != 'quit'):
+    while (choice != 'Quit'):
         print("What action would you like to perform?")
         print("1. Create recipe")
         print("2. Search recipe")
@@ -41,7 +41,7 @@ def main_menu(conn, cursor):
         if choice == '1':
             create_recipe(conn, cursor)
         elif choice == '2':
-            search_recipe(conn, cursor)
+            search_recipe(cursor)
         elif choice == '3':
             modify_recipe(conn, cursor)
         elif choice == '4':
@@ -86,9 +86,9 @@ def calc_difficulty(cooking_time, recipe_ingredients):
     return difficulty
 #calculates the difficulty of the recipe based on the cooking time and number of ingredients
 
-def search_recipe(conn, cursor):
+def search_recipe(cursor):
     all_ingredients = []
-    cursor.execute("SELECT * FROM recipes")
+    cursor.execute("SELECT ingredients FROM recipes")
     results = cursor.fetchall()
     for recipe_ingredients_list in results:
         for recipe_ingredients in recipe_ingredients_list:
@@ -129,11 +129,11 @@ def search_recipe(conn, cursor):
 
         results_recipes_with_ingredient = cursor.fetchall()
         for row in results_recipes_with_ingredient:
-            print("id: " + row[0])
-            print("name: " + row[1])
-            print("ingredients: " + row[2])
-            print("cooking_time: " + row[3])
-            print("difficulty: " + row[4])
+            print("id: ",  row[0])
+            print("name: ",  row[1])
+            print("ingredients: ",  row[2])
+            print("cooking_time: ",  row[3])
+            print("difficulty: ",  row[4])
 #the results are then printed to the screen
 #containing the id, name, ingredients, cooking time, and difficulty
 #the row[0] is the id, row[1] is the name, etc.
@@ -154,7 +154,7 @@ def modify_recipe(conn, cursor):
 #the user is then notified of the changes they are about to make
 #difficulty is not included because it is calculated based on the cooking time and ingredients
 
-    if column_to_update == "name":
+    if column_to_update == "Name":
         cursor.execute("UPDATE recipes SET name = %s WHERE id = %s",
                        (updated_value, recipe_id_for_update))
         print("Recipe name updated")
