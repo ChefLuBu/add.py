@@ -201,21 +201,20 @@ def modify_recipe():
         return None
     else:
         results = session.query(Recipe).with_entities(Recipe.id, Recipe.name).all()
-        print("results = ", results)
         print("Here are the recipes in the database:")
         for recipe in results:
             print("Id:", recipe[0])
             print("Name:", recipe[1])
 
-        recipe_id_edit = int("Enter the id of the recipe you want to edit:")
+        recipe_id_edit = int(input("Enter the id of the recipe you want to edit:"))
         print(session.query(Recipe).with_entities(Recipe.id).all())
 
         recipes_list = session.query(Recipe).with_entities(Recipe.id).all()
         recipe_id_list = []
 
-        for recipe_tuple in recipe_id_edit:
+        for recipe_tuple in recipes_list:
             print(recipe_tuple[0])
-            recipes_list.append(recipe_tuple[0])
+            recipe_id_list.append(recipe_tuple[0])
 
         print(recipe_id_list)
 
