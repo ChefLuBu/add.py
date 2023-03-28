@@ -12,7 +12,9 @@ Base.metadata.create_all(engine)
 
 Session = sessionmaker(bind=engine)
 session = Session()
-
+#Engine is the vehicle that connects to the database
+#Session is the bridge that connects the engine to the database
+#Base is the base class that all classes inherit from
 
 class Recipe(Base):
     __tablename__ = "final_recipes"
@@ -25,15 +27,16 @@ class Recipe(Base):
 
     def __repr__(self):
         return (
-            "<Recipe ID: "
+            "< Recipe ID: "
             + str(self.id)
             + "-"
             + self.name
-            + "Difficulty: "
+            + ", Difficulty: "
             + self.difficulty
             + ">"
         )
-
+#__repr__ is a special method that returns a string representation 
+# of the object
 
 def calc_difficulty(cooking_time, recipe_ingredients):
     if (cooking_time < 10) and (len(recipe_ingredients) < 4):
@@ -58,7 +61,7 @@ def return_ingredients_as_list():
         print("recipe.ingredients = ", recipe.ingredients)
         recipe_ingredints_list = recipe.ingredients.split(", ")
         print("recipe_ingredints_list = ", recipe_ingredints_list)
-
+#.split(", ") is splitting the string into a list
 
 def create_recipe():
     recipe_ingredients = []
@@ -66,8 +69,10 @@ def create_recipe():
     while valid_name == False:
         name = str(input("Enter recipe name: "))
         if len(name) < 50:
-            if name.isalpha():
+            if type(name)==str:
                 valid_name = True
+#This was a better catch than isalpha() because it allows for spaces
+# but still catches numbers 
             else:
                 print("Please enter a valid name")
         else:
@@ -77,6 +82,8 @@ def create_recipe():
         cooking_time = input("Enter cooking time in minutes: ")
         if cooking_time.isnumeric() == True:
             valid_cooking_time = True
+##isnumeric() is a method that returns True if all characters 
+# in the string are numeric
         else:
             print("Please enter a valid cooking time")
     valid_ingredient_number = False
@@ -85,14 +92,24 @@ def create_recipe():
         if ingredient_number.isnumeric() == True:
             valid_ingredient_number = True
             for _ in range(int(ingredient_number)):
+##The underscore is a dummy variable that is used to iterate through a loop
                 ingredient = input("Enter ingredient: ")
-                recipe_ingredients.append(ingredient)
+                if ingredient.isalpha():
+                    recipe_ingredients.append(ingredient)
+                else:
+                    print("Please enter a valid ingredients, delete your mistakes and try again")
+                    break
+##This is a break statement that breaks out of the loop if the user enters
+# an invalid ingredient, such as multiple ingredients or a number 
+# or special character. It currently will still create the recipe, however
+# it will not add the ingredients to the recipe, so it should be deleted
         else:
             valid_ingredient_number = False
             print("Please enter a valid number of ingredients")
     recipe_ingredients_str = ", ".join(recipe_ingredients)
     print(recipe_ingredients_str)
-
+#.join() is a method that joins the elements of an 
+# iterable to the end of the string
     difficulty = calc_difficulty(int(cooking_time), recipe_ingredients)
 
     recipe_format = Recipe(
@@ -106,18 +123,20 @@ def create_recipe():
 
     session.add(recipe_format)
     session.commit()
+#This is the method that adds the recipe to the database
 
 
 def view_all_recipes():
-    recipes_list = session.query(Recipe).all()
-    for recipe in recipes_list:
-        print("Recipe: ", recipe)
-        print("recipe.ingredients = ", recipe.ingredients)
-        recipe_ingredints_list = recipe.ingredients.split(", ")
-        print("recipe_ingredints_list = ", recipe_ingredints_list)
-        if recipe in recipes_list == []:
-            print("There are no recipes in the database")
-            return None
+    all_recipes = []
+    all_recipes = session.query(Recipe).all()
+    if len(all_recipes)==0:
+        print("There are no recipes in the database")
+        return None
+    else:
+        print("Here are all the recipes in the database: ")
+        print("\n")
+        for recipe in all_recipes:
+            print(recipe)
 
 
 def search_by_ingredients():
@@ -140,18 +159,6 @@ def search_by_ingredients():
         for index, tup in enumerate(all_ingredients_list):
             print(str(tup[0] + 1) + ". " + tup[1])
 
-        # try:
-        #     ingredient_index = int(input("Enter ingredient index number: "))
-        #     index_search = ingredient_index.split()
-
-        #     index_searched_ingredients = []
-        #     for ingredient_index in index_search:
-        #         ingredient_index_minus_one = int(ingredient_index) - 1
-        #         search_complete = all_ingredients_list[ingredient_index_minus_one][1]
-
-        #         index_searched_ingredients.append(search_complete)
-        #     print("Here are the results of your search: ", index_searched_ingredients)
-
         try:
             ingredient_index = int(input("Enter ingredient index number"))
             index_searched_ingredients = []
@@ -168,13 +175,19 @@ def search_by_ingredients():
             searched_recipes = session.query(Recipe).filter(*conditions).all()
 
             # print(searched_recipes)
+#conditions is taking the index_searched_ingredients and adding it to the like_term
+#like_term is adding the % to the index_searched_ingredients
+#conditions is adding the like_term to the condition
+#searched_recipes is adding the conditions to the session.query(Recipe).filter(*conditions).all()
 
         except:
             print("Please enter a valid index number")
         else:
-            print("searched_recipes:")
-            for recipe in searched_recipes:
+            print("searched_recipes: ")
+            print("\n")
+            for recipe in searched_recipes: 
                 print(recipe)
+                print("\n")
 
 
 def delete_recipe():
@@ -282,7 +295,7 @@ def main_menu():
         print("2. Search recipe")
         print("3. Modify recipe")
         print("4. Delete recipe")
-        print("5. Quit")
+        print("5. View all recipes")
         print("\n Type Quit to exit the program")
         choice = input("Enter choice: ")
         if choice == "1":
@@ -294,7 +307,7 @@ def main_menu():
         elif choice == "4":
             delete_recipe()
         elif choice == "5":
-            print("returning to main menu")
+            view_all_recipes()
         else:
             if choice == "Quit":
                 print("Goodbye")
