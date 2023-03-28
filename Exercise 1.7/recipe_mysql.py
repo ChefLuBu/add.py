@@ -35,18 +35,26 @@ class Recipe(Base):
             + self.difficulty
             + ">"
         )
+    
 #__repr__ is a special method that returns a string representation 
 # of the object
 
+    def __str__(self):
+        output = "\nName: " + str(self.name) + \
+            "\nCooking time  " + str(self.cooking_time) + " (minutes)"\
+            "\nDifficulty: " + str(self.difficulty) + \
+            "\nIngredients: " + str(self.ingredients)
+        return output
+    
 def calc_difficulty(cooking_time, recipe_ingredients):
     if (cooking_time < 10) and (len(recipe_ingredients) < 4):
-        difficulty = "easy"
+        difficulty = "Easy"
     elif (cooking_time < 10) and (len(recipe_ingredients) >= 4):
-        difficulty = "medium"
+        difficulty = "Medium"
     elif (cooking_time >= 10) and (len(recipe_ingredients) < 4):
-        difficulty = "intermediate"
+        difficulty = "Intermediate"
     elif (cooking_time >= 10) and (len(recipe_ingredients) >= 4):
-        difficulty = "hard"
+        difficulty = "Hard"
     else:
         print("An error occured")
 
