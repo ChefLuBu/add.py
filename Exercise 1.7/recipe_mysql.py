@@ -137,6 +137,9 @@ def view_all_recipes():
         print("\n")
         for recipe in all_recipes:
             print(recipe)
+#This is a method that returns all the recipes in the database
+#len() is a method that returns the length of an object
+#for recipe in all_recipes is a for loop that iterates through the list
 
 
 def search_by_ingredients():
@@ -150,22 +153,32 @@ def search_by_ingredients():
             for recipe_ingredient in recipe_ingredients_list:
                 recipe_ingredients = recipe_ingredient.split(", ")
                 all_ingredients.extend(recipe_ingredients)
+#.split(", ") is splitting the string into a list
+#extend() is a method that adds all the elements 
+# of an iterable to the end of the list
 
         all_ingredients = list(dict.fromkeys(all_ingredients))
         all_ingredients_list = list(enumerate(all_ingredients))
+#dict.fromkeys() is a method that returns a dictionary with the 
+# specified keys and values. enumerate() is a method that takes a
+# collection (e.g. a tuple) and returns it as an enumerate object
 
         print("All ingredients list: ")
 
         for index, tup in enumerate(all_ingredients_list):
             print(str(tup[0] + 1) + ". " + tup[1])
-
+#index is the index number of the ingredient
+#tup is the tuple of the ingredient
+#tup[0] is the index number of the ingredient + 1, so 
+# that the index number starts at 1
         try:
             ingredient_index = int(input("Enter ingredient index number"))
             index_searched_ingredients = []
             for ingredient in all_ingredients:
                 index_searched_ingredients.append(all_ingredients[(ingredient_index - 1)])
                 
-            # print("Here are the results of your search: ", str(index_searched_ingredients))
+#append is adding all_ingredients[(ingredient_index - 1)] to 
+# the index_searched_ingredients
 
             conditions = []
             for ingredient in index_searched_ingredients:
@@ -174,11 +187,12 @@ def search_by_ingredients():
                 conditions.append(condition)
             searched_recipes = session.query(Recipe).filter(*conditions).all()
 
-            # print(searched_recipes)
-#conditions is taking the index_searched_ingredients and adding it to the like_term
+  
+#conditions is taking the index_searched_ingredients and adding it 
+# to the like_term
 #like_term is adding the % to the index_searched_ingredients
-#conditions is adding the like_term to the condition
-#searched_recipes is adding the conditions to the session.query(Recipe).filter(*conditions).all()
+#searched_recipes is adding the conditions to the 
+# session.query(Recipe).filter(*conditions).all()
 
         except:
             print("Please enter a valid index number")
@@ -216,7 +230,7 @@ def delete_recipe():
             else:
                 print("Please enter a valid id")
                 return None
-
+#simple delete function that deletes a recipe from the database
 
 def modify_recipe():
     if session.query(Recipe).count() == 0:
@@ -231,13 +245,17 @@ def modify_recipe():
 
         recipe_id_edit = int(input("Enter the id of the recipe you want to edit:"))
         print(session.query(Recipe).with_entities(Recipe.id).all())
+#with_entities() is a method that returns a list of tuples
 
         recipes_list = session.query(Recipe).with_entities(Recipe.id).all()
         recipe_id_list = []
 
+#recipes_list is a list of tuples containing the recipe ids
         for recipe_tuple in recipes_list:
             print(recipe_tuple[0])
             recipe_id_list.append(recipe_tuple[0])
+#append is adding the recipe_tuple[0] to the recipe_id_list
+#the tuple contains the recipe id
 
         print(recipe_id_list)
 
@@ -251,6 +269,7 @@ def modify_recipe():
             input(
                 "Enter the data you want to update. 1 = Name, 2 = Cooking time, 3 = Ingredients"
             )
+#column_for_update is the column that the user wants to update
         )
         updated_data = input("Enter the new data:")
         print("Updated data = ", updated_data)
