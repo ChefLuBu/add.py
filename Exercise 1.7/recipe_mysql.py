@@ -131,35 +131,43 @@ def search_by_ingredients():
             for recipe_ingredient in recipe_ingredients_list:
                 recipe_ingredients = recipe_ingredient.split(", ")
                 all_ingredients.extend(recipe_ingredients)
-            
+
         all_ingredients = list(dict.fromkeys(all_ingredients))
         all_ingredients_list = list(enumerate(all_ingredients))
 
         print("All ingredients list: ")
+
         for index, tup in enumerate(all_ingredients_list):
             print(str(tup[0] + 1) + ". " + tup[1])
 
-        try:
-            ingredient_index = int(input("Enter ingredient index number: "))
-            index_search = ingredient_index.split(", ")
+        # try:
+        #     ingredient_index = int(input("Enter ingredient index number: "))
+        #     index_search = ingredient_index.split()
 
+        #     index_searched_ingredients = []
+        #     for ingredient_index in index_search:
+        #         ingredient_index_minus_one = int(ingredient_index) - 1
+        #         search_complete = all_ingredients_list[ingredient_index_minus_one][1]
+
+        #         index_searched_ingredients.append(search_complete)
+        #     print("Here are the results of your search: ", index_searched_ingredients)
+
+        try:
+            ingredient_index = int(input("Enter ingredient index number"))
             index_searched_ingredients = []
-            for ingredient_index in index_search:
-                ingredient_index_minus_one = int(ingredient_index) - 1
-                search_complete = all_ingredients_list[ingredient_index_minus_one][1]
+            for ingredient in all_ingredients:
+                index_searched_ingredients.append(all_ingredients[(ingredient_index - 1)])
                 
-                index_searched_ingredients.append(search_complete)
-            print("Here are the results of your search: ", index_searched_ingredients)
+            # print("Here are the results of your search: ", str(index_searched_ingredients))
 
             conditions = []
             for ingredient in index_searched_ingredients:
-                like_term = "%"+ingredient+"%"
+                like_term = "%" + ingredient + "%"
                 condition = Recipe.ingredients.like(like_term)
                 conditions.append(condition)
-            print("conditions: ", conditions)
             searched_recipes = session.query(Recipe).filter(*conditions).all()
 
-            print(searched_recipes)
+            # print(searched_recipes)
 
         except:
             print("Please enter a valid index number")
@@ -180,7 +188,9 @@ def delete_recipe():
         for recipe in results:
             print("Id:", recipe[0])
             print("Name:", recipe[1])
-            recipe_id_delete = input("Enter the id of the recipe you want to delete:")
+            recipe_id_delete = input(
+                "Enter the id of the recipe you want to delete or press enter to return to main menu:"
+            )
 
             if recipe_id_delete.isnumeric() == True:
                 recipe_id_delete = int(recipe_id_delete)
