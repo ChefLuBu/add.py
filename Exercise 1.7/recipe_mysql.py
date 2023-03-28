@@ -127,14 +127,15 @@ def search_by_ingredients():
     else:
         results = session.query(Recipe.ingredients).all()
         all_ingredients = []
-        for result in results:
-            recipe_ingredients = result.ingredients.split(", ")
-            all_ingredients.extend(recipe_ingredients)
-
+        for recipe_ingredients_list in results:
+            for recipe_ingredient in recipe_ingredients_list:
+                recipe_ingredients = recipe_ingredient.split(", ")
+                all_ingredients.extend(recipe_ingredients)
+            
         all_ingredients = list(dict.fromkeys(all_ingredients))
         all_ingredients_list = list(enumerate(all_ingredients))
 
-        print("All ingredients list = ")
+        print("All ingredients list: ")
         for index, tup in enumerate(all_ingredients_list):
             print(str(tup[0] + 1) + ". " + tup[1])
 
