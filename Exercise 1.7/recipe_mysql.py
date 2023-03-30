@@ -12,10 +12,13 @@ Base.metadata.create_all(engine)
 
 Session = sessionmaker(bind=engine)
 session = Session()
-#Engine is the vehicle that connects to the database
-#Session is the bridge that connects the engine to the database
-#Base is the base class that all classes inherit from
+# Engine is the vehicle that connects to the database
+# Session is the bridge that connects the engine to the database
+# Base is the base class that all classes inherit from
 
+
+# __repr__ is a special method that returns a string representation
+# of the object
 class Recipe(Base):
     __tablename__ = "final_recipes"
 
@@ -35,17 +38,18 @@ class Recipe(Base):
             + self.difficulty
             + ">"
         )
-    
-#__repr__ is a special method that returns a string representation 
-# of the object
 
     def __str__(self):
-        output = "\nName: " + str(self.name) + \
-            "\nCooking time  " + str(self.cooking_time) + " (minutes)"\
-            "\nDifficulty: " + str(self.difficulty) + \
-            "\nIngredients: " + str(self.ingredients)
+        output = "\nName: " + str(self.name) + "\nCooking time  " + str(
+            self.cooking_time
+        ) + " (minutes)" "\nDifficulty: " + str(
+            self.difficulty
+        ) + "\nIngredients: " + str(
+            self.ingredients
+        )
         return output
-    
+
+
 def calc_difficulty(cooking_time, recipe_ingredients):
     if (cooking_time < 10) and (len(recipe_ingredients) < 4):
         difficulty = "Easy"
@@ -62,6 +66,7 @@ def calc_difficulty(cooking_time, recipe_ingredients):
     return difficulty
 
 
+# .split(", ") is splitting the string into a list
 def return_ingredients_as_list():
     recipes_list = session.query(Recipe).all()
     for recipe in recipes_list:
@@ -69,7 +74,7 @@ def return_ingredients_as_list():
         print("recipe.ingredients = ", recipe.ingredients)
         recipe_ingredints_list = recipe.ingredients.split(", ")
         print("recipe_ingredints_list = ", recipe_ingredints_list)
-#.split(", ") is splitting the string into a list
+
 
 def create_recipe():
     recipe_ingredients = []
@@ -77,10 +82,10 @@ def create_recipe():
     while valid_name == False:
         name = str(input("Enter recipe name: "))
         if len(name) < 50:
-            if type(name)==str:
+            if type(name) == str:
                 valid_name = True
-#This was a better catch than isalpha() because it allows for spaces
-# but still catches numbers 
+            # This was a better catch than isalpha() because it allows for spaces
+            # but still catches numbers
             else:
                 print("Please enter a valid name")
         else:
@@ -90,8 +95,8 @@ def create_recipe():
         cooking_time = input("Enter cooking time in minutes: ")
         if cooking_time.isnumeric() == True:
             valid_cooking_time = True
-##isnumeric() is a method that returns True if all characters 
-# in the string are numeric
+        ##isnumeric() is a method that returns True if all characters
+        # in the string are numeric
         else:
             print("Please enter a valid cooking time")
     valid_ingredient_number = False
@@ -100,24 +105,26 @@ def create_recipe():
         if ingredient_number.isnumeric() == True:
             valid_ingredient_number = True
             for _ in range(int(ingredient_number)):
-##The underscore is a dummy variable that is used to iterate through a loop
+                ##The underscore is a dummy variable that is used to iterate through a loop
                 ingredient = input("Enter ingredient: ")
                 if ingredient.isalpha():
                     recipe_ingredients.append(ingredient)
                 else:
-                    print("Please enter a valid ingredients, delete your mistakes and try again")
+                    print(
+                        "Please enter a valid ingredients, delete your mistakes and try again"
+                    )
                     break
-##This is a break statement that breaks out of the loop if the user enters
-# an invalid ingredient, such as multiple ingredients or a number 
-# or special character. It currently will still create the recipe, however
-# it will not add the ingredients to the recipe, so it should be deleted
+        ##This is a break statement that breaks out of the loop if the user enters
+        # an invalid ingredient, such as multiple ingredients or a number
+        # or special character. It currently will still create the recipe, however
+        # it will not add the ingredients to the recipe, so it should be deleted
         else:
             valid_ingredient_number = False
             print("Please enter a valid number of ingredients")
+    # .join() is a method that joins the elements of an
+    # iterable to the end of the string
     recipe_ingredients_str = ", ".join(recipe_ingredients)
     print(recipe_ingredients_str)
-#.join() is a method that joins the elements of an 
-# iterable to the end of the string
     difficulty = calc_difficulty(int(cooking_time), recipe_ingredients)
 
     recipe_format = Recipe(
@@ -128,16 +135,16 @@ def create_recipe():
     )
 
     print(recipe_format)
+    # This is the method that adds the recipe to the database
 
     session.add(recipe_format)
     session.commit()
-#This is the method that adds the recipe to the database
 
 
 def view_all_recipes():
     all_recipes = []
     all_recipes = session.query(Recipe).all()
-    if len(all_recipes)==0:
+    if len(all_recipes) == 0:
         print("There are no recipes in the database")
         return None
     else:
@@ -145,9 +152,11 @@ def view_all_recipes():
         print("\n")
         for recipe in all_recipes:
             print(recipe)
-#This is a method that returns all the recipes in the database
-#len() is a method that returns the length of an object
-#for recipe in all_recipes is a for loop that iterates through the list
+
+
+# This is a method that returns all the recipes in the database
+# len() is a method that returns the length of an object
+# for recipe in all_recipes is a for loop that iterates through the list
 
 
 def search_by_ingredients():
@@ -159,59 +168,59 @@ def search_by_ingredients():
         all_ingredients = []
         for recipe_ingredients_list in results:
             for recipe_ingredient in recipe_ingredients_list:
+                # .split(", ") is splitting the string into a list
+                # extend() is a method that adds all the elements
+                # of an iterable to the end of the list
                 recipe_ingredients = recipe_ingredient.split(", ")
                 all_ingredients.extend(recipe_ingredients)
-#.split(", ") is splitting the string into a list
-#extend() is a method that adds all the elements 
-# of an iterable to the end of the list
 
+        # dict.fromkeys() is a method that returns a dictionary with the
+        # specified keys and values. enumerate() is a method that takes a
+        # collection (e.g. a tuple) and returns it as an enumerate object
         all_ingredients = list(dict.fromkeys(all_ingredients))
         all_ingredients_list = list(enumerate(all_ingredients))
-#dict.fromkeys() is a method that returns a dictionary with the 
-# specified keys and values. enumerate() is a method that takes a
-# collection (e.g. a tuple) and returns it as an enumerate object
 
         print("All ingredients list: ")
 
+        # index is the index number of the ingredient
+        # tup is the tuple of the ingredient
+        # tup[0] is the index number of the ingredient + 1, so
+        # that the index number starts at 1
         for index, tup in enumerate(all_ingredients_list):
             print(str(tup[0] + 1) + ". " + tup[1])
-#index is the index number of the ingredient
-#tup is the tuple of the ingredient
-#tup[0] is the index number of the ingredient + 1, so 
-# that the index number starts at 1
         try:
             ingredient_index = int(input("Enter ingredient index number"))
             index_searched_ingredients = []
             for ingredient in all_ingredients:
-                index_searched_ingredients.append(all_ingredients[(ingredient_index - 1)])
-                
-#append is adding all_ingredients[(ingredient_index - 1)] to 
-# the index_searched_ingredients
+                # append is adding all_ingredients[(ingredient_index - 1)] to
+                # the index_searched_ingredients
+                index_searched_ingredients.append(
+                    all_ingredients[(ingredient_index - 1)]
+                )
 
             conditions = []
             for ingredient in index_searched_ingredients:
                 like_term = "%" + ingredient + "%"
+                # conditions is taking the index_searched_ingredients and adding it
+                # to the like_term
+                # like_term is adding the % to the index_searched_ingredients
+                # searched_recipes is adding the conditions to the
+                # session.query(Recipe).filter(*conditions).all()
                 condition = Recipe.ingredients.like(like_term)
                 conditions.append(condition)
             searched_recipes = session.query(Recipe).filter(*conditions).all()
-
-  
-#conditions is taking the index_searched_ingredients and adding it 
-# to the like_term
-#like_term is adding the % to the index_searched_ingredients
-#searched_recipes is adding the conditions to the 
-# session.query(Recipe).filter(*conditions).all()
 
         except:
             print("Please enter a valid index number")
         else:
             print("searched_recipes: ")
             print("\n")
-            for recipe in searched_recipes: 
+            for recipe in searched_recipes:
                 print(recipe)
                 print("\n")
 
 
+# simple delete function that deletes a recipe from the database
 def delete_recipe():
     if session.query(Recipe).count() == 0:
         print("There are no recipes in the database")
@@ -238,7 +247,7 @@ def delete_recipe():
             else:
                 print("Please enter a valid id")
                 return None
-#simple delete function that deletes a recipe from the database
+
 
 def modify_recipe():
     if session.query(Recipe).count() == 0:
@@ -252,18 +261,17 @@ def modify_recipe():
             print("Name:", recipe[1])
 
         recipe_id_edit = int(input("Enter the id of the recipe you want to edit:"))
+        # with_entities() is a method that returns a list of tuples
         print(session.query(Recipe).with_entities(Recipe.id).all())
-#with_entities() is a method that returns a list of tuples
-
         recipes_list = session.query(Recipe).with_entities(Recipe.id).all()
         recipe_id_list = []
 
-#recipes_list is a list of tuples containing the recipe ids
+        # recipes_list is a list of tuples containing the recipe ids
+        # append is adding the recipe_tuple[0] to the recipe_id_list
+        # the tuple contains the recipe id
         for recipe_tuple in recipes_list:
             print(recipe_tuple[0])
             recipe_id_list.append(recipe_tuple[0])
-#append is adding the recipe_tuple[0] to the recipe_id_list
-#the tuple contains the recipe id
 
         print(recipe_id_list)
 
@@ -273,11 +281,11 @@ def modify_recipe():
             print("Please, continue with the edit process")
         edited_recipe = session.query(Recipe).filter_by(id=recipe_id_edit).one()
         print("edited_recipe = ", edited_recipe)
+        # column_for_update is the column that the user wants to update
         column_for_update = int(
             input(
                 "Enter the data you want to update. 1 = Name, 2 = Cooking time, 3 = Ingredients"
             )
-#column_for_update is the column that the user wants to update
         )
         updated_data = input("Enter the new data:")
         print("Updated data = ", updated_data)
